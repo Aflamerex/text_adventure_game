@@ -93,7 +93,7 @@ def fights():
     battling()
 
 def battling():
-    mixer.music.load('C:\Users\Desarrollador\mystuff\music\Alexander Ehlers - Doomed.mp3')
+    mixer.music.load('music\Alexander Ehlers - Doomed.mp3')
     mixer.music.play()
     global cthulu_encounter_check
     global enemy_hp
@@ -137,6 +137,7 @@ def battling():
             print "Did 100 damage!"
             enemy_hp -= 100
 
+
         if enemy_hp <= 0:
             mixer.music.stop()
             print "You won!"
@@ -162,7 +163,7 @@ def dead():
 
 
 def basement():
-    mixer.music.load('C:\Users\Desarrollador\mystuff\music\Alexander Ehlers - Warped.mp3')
+    mixer.music.load('music\Alexander Ehlers - Warped.mp3')
     mixer.music.play(-1)
     print "You enter the basement"
     print "Torches surround you, water drips from the stalagmites above you."
@@ -234,7 +235,7 @@ def cthulu_room_fight():
     fights()
 
 def cthulu_encounter():
-    mixer.music.load('C:\Users\Desarrollador\mystuff\music\Alexander Ehlers - Warped.mp3')
+    mixer.music.load('music\Alexander Ehlers - Warped.mp3')
     mixer.music.play(-1)
     global enemy_hp
     chara_hp = 200
