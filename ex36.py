@@ -137,7 +137,6 @@ def battling():
             print "Did 100 damage!"
             enemy_hp -= 100
 
-
         if enemy_hp <= 0:
             mixer.music.stop()
             print "You won!"
