@@ -2,14 +2,42 @@
 from pygame import mixer
 import random
 import sys
+import ConfigParser
+import os
+
+global func
+global check_func
+check_func=""
+
+def funct_on(check_func):
+    func = "%s()" % check_func
+
+
+if os.path.exists('C:\Users\Desarrollador\mystuff\Game\dist\ex36\save.ini'):
+    with open('C:\Users\Desarrollador\mystuff\Game\dist\ex36\save.ini') as f:
+        bullshit = 9000
+else:
+    # lets create that config file for next time...
+    cfgfile = open("C:\Users\Desarrollador\mystuff\Game\dist\ex36\save.ini",'w')
+
+    # add the settings to the structure of the file, and lets write it out...
+    Config.add_section('Save_Checks')
+    Config.set('Dark','Completed?',False)
+    Config.set('Light','Completed?', False)
+    Config.write(cfgfile)
+    cfgfile.close()
 
 check_for_second_playthrough_light = False
 check_for_second_playthrough_dark = False
 mixer.init()
 
 def intro():
+    global check_func
     global chara_hp
     global enemy_hp
+    global choices
+    check_func = "intro"
+    choices = ['1','2']
     chara_hp = 100
     enemy_hp = 100
     check_calm_mind = False
@@ -26,14 +54,13 @@ def intro():
     2.-basement
     """
     choice = raw_input("> ")
+
     if choice == "1":
         outside()
     elif choice == "2":
         basement()
-
-print "Welcome to my game."
-print "It's called the adventures of Lester."
-print "enjoy!"
+    else:
+        error_handling(choices)
 
 def win_condition():
     hp = 100
@@ -98,6 +125,8 @@ def battling():
     global cthulu_encounter_check
     global enemy_hp
     global chara_hp
+    global choices
+    choices = ['1','2','3','4']
     print "You encounter something!"
     while enemy_hp > 0:
         if chara_hp <= 0:
@@ -136,6 +165,8 @@ def battling():
             print "Flail is super effective!"
             print "Did 100 damage!"
             enemy_hp -= 100
+        else:
+            error_handling(choice)
 
 
         if enemy_hp <= 0:
@@ -143,12 +174,16 @@ def battling():
             print "You won!"
             if in_cthulu_room == True:
                 cthulu_encounter()
+                break
+                enemy_hp = -100
             elif cthulu_encounter_check == True:
                 endgame_dark()
+                enemy_hp = -100
         elif enemy_hp > 0 and cthulu_encounter_check == True:
             BOSSAI()
         elif enemy_hp > 0:
             enemyAI()
+
 
 def dead():
     print "Good job dying!"
@@ -161,10 +196,24 @@ def dead():
     else:
         quit()
 
+def error_handling(choice):
+    global funct_on
+    global choices
+    choice =""
+    #I'm very dumb for not doing this first
+    if choice in choices:
+        funct_on()
+    else:
+        while choice not in choices:
+            print "Please write a valid input reference the help file that comes with the program."
+            choice = raw_input("> ")
+        return choice
 
 def basement():
     mixer.music.load('music\Alexander Ehlers - Warped.mp3')
     mixer.music.play(-1)
+    global choices
+    choices = ['yes','no']
     print "You enter the basement"
     print "Torches surround you, water drips from the stalagmites above you."
     print "You don't feel safe here."
@@ -175,8 +224,12 @@ def basement():
         cavern()
     elif choice == "no":
         intro()
+    else:
+        error_handling(choice)
 
 def cavern():
+    global choices
+    choices = ['yes','no']
     print "Slowly the basement transform into a cavern."
     print "The torches guide you and you appear to be in the entrance of a room."
     print "However your body trembles as you approach it."
@@ -187,9 +240,13 @@ def cavern():
         cthulu_room()
     elif choice == "no":
         basement()
+    else:
+        error_handling(choice)
 
 def cthulu_room():
-    global hp
+    global choices
+    choices = ['yes','no']
+    global chara_hp
     print "You are now in a room filled to the brim with decorations of a being."
     print "This being is indescribable, you try to speak..."
     pause()
@@ -222,6 +279,8 @@ def cthulu_room():
         global in_cthulu_room
         in_cthulu_room = True
         cthulu_room_fight()
+    else:
+        error_handling(choice)
 
 def cthulu_room_fight():
     print "This corridor seems like it's losing color"
@@ -238,6 +297,8 @@ def cthulu_encounter():
     mixer.music.load('music\Alexander Ehlers - Warped.mp3')
     mixer.music.play(-1)
     global enemy_hp
+    global choices
+    choices = ['1','2','3','4']
     chara_hp = 200
     enemy_hp = 10000
     global hp
@@ -298,8 +359,60 @@ def cthulu_encounter():
             print "After some hours, he bids you farewell."
             pause()
             endgame_dark()
+        else:
+            error_handling()
+    elif choice == "4":
+        Cthulu_negotiation()
+    else:
+        error_handling(choices)
 
-def endgame_dark():
+def Cthulu_negotiation():
+    global choices
+    choices = ['1','2','3','4']
+    print "You start talking about being spared of your life."
+    print "He seems intrigued and asks what would you do for your life."
+    print """
+    1.-I would not do much,actually.
+    2.-I will fight to keep living.
+    3.-I could even fight you RIGHT NOW!
+    4.-I could be your sidekick or something.
+    """
+
+    choice = raw_input("> ")
+
+    if choice == "1":
+        print "He offers you powers to do his bidding."
+        print "You can recline"
+
+        choice = raw_input("> ").lower
+
+        if choice == "accept":
+            endgame_dark_2()
+        elif choice == "decline":
+            print "It seems annoyed and leaves..."
+            print "You see an exit and run for it not being able to comprehend what just happened."
+            endgame_dark_1()
+    if choice == "2":
+        print ""
+    else:
+        error_handling(choicess)
+
+def endgame_dark_2():
+    print "He point whatever it has for fingers to the sky."
+    print "You get striken by lightning."
+    print "You don't feel pain, in fact you don't feel anything."
+    print "You yell."
+    print "You feel good..."
+    print "It feels g...o...o...d"
+    print "Ha...ha....ha..ha...ha..."
+    print "You start to transform into a being that looks like the one you just faced."
+    print "It starts...you say to yourself."
+    print "It begins...you say to yourself."
+    print "It can finally start!\nThe death of everything."
+    pause()
+    quit()
+
+def endgame_dark_1():
     print "While you go outside the cavern, your head starts ringing."
     print "You hear a voice."
     pause()
@@ -318,10 +431,16 @@ def pause():
 def cthulu_run_escenario():
     print "you have succesfully ran against a being of unimaginable power."
     print "I hope you can tell this story."
+    pause()
     print "Or write a book or something."
     print "What should you do Henry?"
+    pause()
 
 
+print "Welcome to my game."
+print "It's called the adventures of Lester."
+print "enjoy!"
+pause()
 
 if check_for_second_playthrough_dark == False and check_for_second_playthrough_light == False:
     intro()
